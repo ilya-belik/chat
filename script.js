@@ -1,3 +1,4 @@
+var chatModule = (function () {
 let sendBtn 			 = document.querySelector('.send-message-btn-js'),
 	 messageInput		 = document.querySelector('.client-massage-text-js'),
 	 messagesContainer = document.querySelector('.messages-container'),
@@ -92,3 +93,7 @@ sendBtn.onclick = function(){
 		});
 	}, 1000);
 }
+  return {
+    open_chat
+  };
+})();
