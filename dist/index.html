@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chat</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="css/style.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/reset.css">
+</head>
+<body>
+
+	<button class="open-chat-js" onclick="chatModule.chat_actions()">Открыть чат</button>
+
+	<div class="modal-chat modal-chat-js">
+		<div class="chat-header">
+			<div class="text-block">
+				<h5 class="title">Введите сообщение</h5>
+				<p class="subtitle">Оператор в сети</p>
+			</div>
+			<button class="close-chat close-chat-js"></button>
+		</div>
+		<div class="chat-body">
+			<div class="messages-container">
+
+				<!-- <div class="message agent">
+					<img src="sender.jpg" alt="sender avatar" class="avatar">
+					<div class="text-container">
+						<p class="sender-name">Alex</p>
+						<p class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis illum tempora earum pariatur, reprehenderit quibusdam laudantium vel reiciendis esse. Dolor.</p>
+					</div>
+				</div>
+
+				<div class="message client">
+					<div class="text-container">
+						<p class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis illum tempora earum pariatur, reprehenderit quibusdam laudantium vel reiciendis esse. Dolor.</p>
+					</div>
+				</div> -->
+
+				<!-- <div class="message-prompts message-prompts-js active">
+					<button class="prompt prompts-js">Lorem</button>
+				</div> -->
+
+			</div>
+			<form class="send-message send-message-js">
+				<div class="input-container">
+					<input type="text" placeholder="Текст сообщения..." class="client-massage-text client-massage-text-js">
+					<button class="send-message-btn send-message-btn-js" type="button"></button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="js/script.min.js"></script>
+	<script src="js/demo.js"></script>
+
+</body>
+</html>
