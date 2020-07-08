@@ -67,12 +67,14 @@ gulp.task('browser-sync', function(){
   });
 
   gulp.task('js-build', function(){
-     return gulp.src('src/js/chat.min.js')
+     return gulp.src('src/js/script.min.js')
+     .pipe(rename('chat.min.js'))
      .pipe(gulp.dest('dist/js/'))
   });
 
   gulp.task('css-build', function(){
-     return gulp.src('src/css/chat.min.css')
+     return gulp.src('src/css/style.min.css')
+     .pipe(rename('chat.min.css'))
      .pipe(gulp.dest('dist/css/'))
   });
 
