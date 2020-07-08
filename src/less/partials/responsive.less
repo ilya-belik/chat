@@ -5,6 +5,14 @@
 		left: 0;
 		right: 0;
 		
+		.chat-header {
+			.btn-group{
+				.zoom-chat{
+					display: none;
+				}
+			}
+		}
+
 		.chat-body{
 			height: 100%;
 			
@@ -29,8 +37,28 @@
 
 		border-radius: 10px 30px 0 0;
 
+		.chat-header {
+			.btn-group{
+				.zoom-chat{
+					display: inline;
+				}
+			}
+		}
 		.chat-body .messages-container{
 			height: 300px;
+			transition: height .5s;
+		}
+
+
+		&.zoom-in{
+			right: 0;
+			border-radius: 0;
+			// height: 100vh;
+
+			.chat-body .messages-container{
+				transition: height .5s;
+				height: calc(100vh - 145px);
+			}
 		}
 	}
 }

@@ -7,6 +7,8 @@ const chatModule = (function () {
 		 messagesContainer = document.querySelector('.messages-container'),
 		 modalChat 			 = document.querySelector('.modal-chat-js'),
 
+		 zoomChatBtn 		 = document.querySelector('.zoom-chat-js'),
+
 		 config 		 = {},
 		 lastMessage = {
 		 	client: '',
@@ -48,6 +50,11 @@ const chatModule = (function () {
 
 	function chat_actions(){
 		modalChat.classList.toggle('active');
+	}
+
+	function zoom_chat(){
+		modalChat.classList.toggle('zoom-in');
+		zoomChatBtn.classList.toggle('active');
 	}
 
 	function render_html(message){
@@ -125,6 +132,12 @@ const chatModule = (function () {
 		messageInput.value = '';
 	}
 
+
+
+	// Zoom chat on desctop
+	zoomChatBtn.onclick = function(){
+		zoom_chat();
+	}
 
 	// Send message 
 	sendBtn.onclick = function(){
@@ -229,4 +242,3 @@ chatModule.config_chat({
 
 
 */
-
