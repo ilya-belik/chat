@@ -9,59 +9,82 @@ const chatModule = (function () {
 
 		 zoomChatBtn 		 = document.querySelector('.zoom-chat-js'),
 
-		 config 		 = {},
 		 lastMessage = {
 		 	client: '',
 		 	agent: ''
 		 };
+ 
+	class Global_Chat_Config{
+		constructor(options){
+			this.audio = options.audio;
+			this.onSendClientMessage = options.onSendClientMessage;
+		}
 
+		changeРroperties(data){
+			if (data) {
+				for(let key in data){
+					switch (key){
+						case 'audio':
+							this.audio = data[key]
+						break;
+						case 'onSendClientMessage':
+							this.onSendClientMessage = data[key]
+						break;
+						case 'prompts':
+							this.prompts_gen(data[key]);
+						break;
+					}
+				}
+			}
+		}
 
-	function config_chat(data){
-		if (data) {
-			for(let key in data){
-
-				if (key === 'prompts') {
-					let prompts = document.createElement('div');
-					prompts.classList.add('message-prompts', 'message-prompts-js', 'active');
+		prompts_gen(arr){
+			let prompts = document.createElement('div');
+			    prompts.classList.add('message-prompts', 'message-prompts-js', 'active');
 
 					
 
-					for(let i = 0; i < data[key].length; i++){
-						let promtBtn = document.createElement('button');
-						promtBtn.classList.add('prompt', 'prompts-js');
+			for(let i = 0; i < arr.length; i++){
+				let promtBtn = document.createElement('button');
+				promtBtn.classList.add('prompt', 'prompts-js');
 
-						promtBtn.innerHTML = data[key][i];
+				promtBtn.innerHTML = arr[i];
 
-						prompts.appendChild(promtBtn);
-
-					}
-
-
-
-					messagesContainer.appendChild(prompts);
-				}
-				else if(key === 'onSendClientMessage'){
-					config.onSendClientMessage = data[key];
-				}
-
+				prompts.appendChild(promtBtn);
 			}
-		}
-	}
 
+			messagesContainer.appendChild(prompts);
+		}
+	}	
+
+	let globalConfig = new Global_Chat_Config({
+		audio: false,
+		onSendClientMessage: false,
+	});
+
+
+	// Открыть/закрыть чат 
 	function chat_actions(){
 		modalChat.classList.toggle('active');
 	}
 
+
+	// Увеличение чата
 	function zoom_chat(){
 		modalChat.classList.toggle('zoom-in');
 		zoomChatBtn.classList.toggle('active');
 	}
 
+	// Рендер сообщения в чате
 	function render_html(message){
+
+		// Если есть подсказки - убрать
 		let prompts = document.querySelector('.message-prompts-js');
 		if (prompts && prompts.classList.contains('active'))
 			prompts.classList.remove('active');
 
+
+		// Рендер
 		messagesContainer.appendChild(message);
 		messagesContainer.scrollTop = messagesContainer.scrollHeight;
 		reset_form();
@@ -86,10 +109,13 @@ const chatModule = (function () {
 		});
 	*/
 
+
+	// Содание сообщения 
 	function create_message(data){
 		let message = document.createElement('div');
 		message.classList.add('message');
 
+		// Если сообщение пустое
 		if (!data.message.length) return false;
 
 		// If the client sent a message
@@ -102,8 +128,10 @@ const chatModule = (function () {
 
 			lastMessage.client = data.message;
 
-			if (config.onSendClientMessage){
-				config.onSendClientMessage();
+
+			// Выполнение функции после отправки сообщения
+			if (globalConfig.onSendClientMessage){
+				globalConfig.onSendClientMessage();
 			} 
 
 		}
@@ -119,6 +147,10 @@ const chatModule = (function () {
 										</div>`;
 			
 			lastMessage.agent = data.message;
+
+			if (globalConfig.audio) {
+				new_message_sound();
+			}
 		}
 
 
@@ -126,6 +158,20 @@ const chatModule = (function () {
 		render_html(message);
 	}
 
+
+	// Звук входящего ссобщения
+	function new_message_sound(){
+		let audio = new Audio();
+  		audio.src = 'audio/chatModule-newMessage.mp3'; 
+  		audio.autoplay = true;
+	}
+
+
+	if (globalConfig.audio) {
+		let audio = new Audio(); // Создаём новый элемент Audio
+  		audio.src = '../audio/chatModule-newMessage.mp3'; // Указываем путь к звуку "клика"
+  		audio.autoplay = true; // Автоматически запускаем
+	}
 
 	// Reset input in form
 	function reset_form(){
@@ -147,6 +193,8 @@ const chatModule = (function () {
 		});
 	}
 
+
+	//  При отправке формы по нажатию enter
 	sendMessageForm.onsubmit = function(){
 		create_message({
 			type: 'client',
@@ -155,6 +203,7 @@ const chatModule = (function () {
 		return false;
 	}
 
+	// Отправка сообщения при клике на подсказки
 	messagesContainer.onclick = function(event){
 		let target = event.target;
 
@@ -176,8 +225,8 @@ const chatModule = (function () {
 	return {
 	   chat_actions,
 	   create_message,
-	   config_chat,
 	   lastMessage,
+	   globalConfig,
 	};
 
 })();
