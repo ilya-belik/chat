@@ -16,7 +16,7 @@ gulp.task('less', function(){
       }))
 
       .pipe(minifyCss())
-      .pipe(rename('style.min.css'))
+      .pipe(rename('chat.min.css'))
 
       .pipe(gulp.dest('src/css/'))
 
@@ -37,7 +37,7 @@ gulp.task('html', function(){
 gulp.task('js', function(){
    return gulp.src('src/js/script.js')
 
-    .pipe(rename('script.min.js'))
+    .pipe(rename('chat.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('src/js'))
     
@@ -67,15 +67,20 @@ gulp.task('browser-sync', function(){
   });
 
   gulp.task('js-build', function(){
-     return gulp.src('src/js/script.min.js')
+     return gulp.src('src/js/chat.min.js')
      .pipe(rename('chat.min.js'))
      .pipe(gulp.dest('dist/js/'))
   });
 
   gulp.task('css-build', function(){
-     return gulp.src('src/css/style.min.css')
+     return gulp.src('src/css/chat.min.css')
      .pipe(rename('chat.min.css'))
      .pipe(gulp.dest('dist/css/'))
+  });
+
+  gulp.task('audio-build', function(){
+     return gulp.src('src/audio/**/*.*')
+     .pipe(gulp.dest('dist/audio/'))
   });
 
   gulp.task('html-build', function(){
@@ -86,9 +91,10 @@ gulp.task('browser-sync', function(){
   gulp.task('build', gulp.series(
     'fonts-build',
     'img-build',
+    'audio-build',
     'html-build',
     'js-build',
-    'css-build'
+    'css-build',
   ));
 // ==============
 
