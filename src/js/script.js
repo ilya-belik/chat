@@ -8,7 +8,7 @@ const chatModule = (function () {
 		 modalChat 			 = document.querySelector('.modal-chat-js'),
 
 		 zoomChatBtn 		 = document.querySelector('.zoom-chat-js'),
-
+		 chatHistory		 = [],
 		 lastMessage = {
 		 	client: '',
 		 	agent: ''
@@ -18,6 +18,7 @@ const chatModule = (function () {
 		constructor(options){
 			this.audio = options.audio;
 			this.onSendClientMessage = options.onSendClientMessage;
+			this.messages = options.messages;
 		}
 
 		changeРroperties(data){
@@ -94,6 +95,7 @@ const chatModule = (function () {
 
 
 	/*
+		Аргументы 
 		create_message({
 			type: 'client',
 			message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis illum tempora earum pariatur, reprehenderit quibu',
@@ -112,14 +114,20 @@ const chatModule = (function () {
 
 	// Содание сообщения 
 	function create_message(data){
-		let message = document.createElement('div');
+		let message 			= document.createElement('div');
+
+
 		message.classList.add('message');
+
+		message_to_history(data);
 
 		// Если сообщение пустое
 		if (!data.message.length) return false;
 
 		// If the client sent a message
 		if (data.type === 'client') {
+
+
 
 			message.classList.add('client');
 			message.innerHTML = `<div class="text-container">
@@ -140,7 +148,13 @@ const chatModule = (function () {
 		else if(data.type == 'agent'){
 			message.classList.add('agent');
 
-			message.innerHTML = `<img src="${data.sender.avatar}" alt="sender avatar" class="avatar">
+			// message.innerHTML = `<img src="${data.sender.avatar}" alt="sender avatar" class="avatar">
+			// 							<div class="text-container">
+			// 								<p class="sender-name">${data.sender.name}</p>
+			// 								<p class="message-text">${data.message}</p>
+			// 							</div>`;
+
+			message.innerHTML = `<figure class="avatar" style="background-image: url('${data.sender.avatar}')"></figure>
 										<div class="text-container">
 											<p class="sender-name">${data.sender.name}</p>
 											<p class="message-text">${data.message}</p>
@@ -159,18 +173,25 @@ const chatModule = (function () {
 	}
 
 
-	// Звук входящего ссобщения
+	// Звук входящего сообщения
 	function new_message_sound(){
 		let audio = new Audio();
   		audio.src = 'audio/chatModule-newMessage.mp3'; 
   		audio.autoplay = true;
 	}
 
-
-	if (globalConfig.audio) {
-		let audio = new Audio(); // Создаём новый элемент Audio
-  		audio.src = '../audio/chatModule-newMessage.mp3'; // Указываем путь к звуку "клика"
-  		audio.autoplay = true; // Автоматически запускаем
+	// Запись сообщения в историю 
+	function message_to_history(messageInfo){
+		let todayDate = function(){
+								let date = new Date();
+								return `${date.getFullYear()}-${date.getDate()}-${date.getMonth()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+							 },
+			 message = {
+			 	type = messageInfo.type,
+			 	date = todayDate(),
+			 	messageText = messageInfo.message,
+			 };
+		chatHistory.push(message);
 	}
 
 	// Reset input in form
@@ -227,6 +248,7 @@ const chatModule = (function () {
 	   create_message,
 	   lastMessage,
 	   globalConfig,
+	   chatHistory
 	};
 
 })();
@@ -275,18 +297,32 @@ chatModule.create_message({
 
 
 
-chatModule.config_chat({
-	// Подсказки для первого смс
+chatModule.globalConfig.changeРroperties({
+	// Звук нового сообщения
+	audio: true,
+
+	// Что произойдет после отправки сообщения юзером?
+	onSendClientMessage: function(){
+
+		setTimeout(function(){
+			chatModule.create_message({
+				type: 'agent',
+				message: chatModule.lastMessage.client,
+				sender: {
+					avatar: 'img/sender.jpg',
+					name: 'Alex',
+				}
+			});
+		}, 1000);
+		
+	},
+
+	// Подсказки для первого сообщения
 	prompts: [
 		'Здравствуйте!',
 		'Как вам позвонить?',
 		'Какой у вас сегодня график работы?'
 	],
-
-	// Что произойдет после отправки смс юзером?
-	onSendClientMessage: function(){
-		console.log(chatModule.lastMessage);
-	},
 });
 
 
