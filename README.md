@@ -1,6 +1,7 @@
 # Модуль чата (Front-End)
 
-[Демонстрация чата](https://ilya-belik.github.io/chat/dist/ "Демонстрация")
+<a href="https://ilya-belik.github.io/chat/dist/ " target="_blank">Демонстрация чата</a>
+
 #
 
 ### Установка чата:
